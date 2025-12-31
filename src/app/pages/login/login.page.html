@@ -1,0 +1,43 @@
+<ion-content class="login-background">
+  <ion-grid class="full-height-grid">
+    <ion-row class="ion-justify-content-center ion-align-items-center full-height-row">
+      <ion-col size="12" size-md="8" size-lg="4">
+
+        <ion-card class="login-card">
+          <div class="ion-text-center ion-padding-top ion-margin-top">
+            <h1 class="logo-text">HotelApp</h1>
+          </div>
+
+          <ion-card-content>
+            <ion-item lines="none" class="custom-input">
+              <ion-input type="email" label="Email" labelPlacement="floating" [(ngModel)]="login.email"
+                (ionBlur)="onBlur('email')">
+              </ion-input>
+            </ion-item>
+            <p class="err-txt">{{ errormessage.emailReq }}</p>
+
+            <ion-item lines="none" class="custom-password-item ">
+              <ion-input [type]="passwordType" label="Password" labelPlacement="floating"
+                [(ngModel)]="login.password" (ionBlur)="onBlur('password')"></ion-input>
+              <ion-button fill="clear" slot="end" (click)="togglePassword()" class="eye-btn">
+                <ion-icon [name]="passwordIcon" slot="icon-only"></ion-icon>
+              </ion-button>
+            </ion-item>
+            <p class="err-txt">{{ errormessage.passwordReq }}</p>
+
+            <ion-button expand="block" (click)="onLogin()" class="login-btn ion-margin-top">
+              Log In
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+
+        <ion-card class="signup-card ion-text-center">
+          <ion-card-content>
+            Don't have an account? <a routerLink="/signup">Sign up</a>
+          </ion-card-content>
+        </ion-card>
+
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

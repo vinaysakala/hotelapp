@@ -1,0 +1,104 @@
+.login-background {
+    --background: #fafafa;
+}
+
+.full-height-grid {
+    height: 100%;
+}
+
+.full-height-row {
+    height: 100%;
+}
+
+.login-card {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    box-shadow: none;
+    border-radius: 1px;
+    margin-bottom: 10px;
+}
+
+.signup-card {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    box-shadow: none;
+    border-radius: 1px;
+    margin-top: 10px;
+
+    a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #0095f6;
+    }
+}
+
+.logo-text {
+    font-family: 'Arial', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 500;
+}
+
+
+.login-btn {
+    --background: #0095f6;
+    --border-radius: 8px;
+    --box-shadow: none;
+    font-weight: bold;
+    height: 35px;
+    font-size: 14px;
+}
+
+.custom-input {
+    --background: #fafafa;
+    --border-radius: 3px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+
+    --highlight-color-focused: #0095f6;
+    color: #262626;
+
+    ion-label,
+    .label-text {
+        color: #8e8e8e !important;
+        font-size: 12px;
+    }
+
+    margin-bottom: 4px;
+}
+
+.custom-password-item {
+    --background: #fafafa;
+    --padding-end: 0px;
+    --inner-padding-end: 0px;
+    --highlight-color-focused: #0095f6;
+    color: #262626;
+
+    ion-label,
+    .label-text {
+        color: #8e8e8e !important;
+        font-size: 12px;
+    }
+
+    .eye-btn {
+        margin-inline-start: 0px;
+        margin-inline-end: 5px;
+        width: 30px;
+        height: 30px;
+    }
+}
+
+ion-content {
+    --keyboard-offset: 0px !important;
+}
+
+.eye-btn {
+    --color: #8e8e8e;
+    --padding-end: 0;
+    height: 24px;
+    font-size: 17px;
+}
+
+.err-txt {
+    color: red;
+    font-size: 12px;
+}

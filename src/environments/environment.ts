@@ -1,16 +1,13 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: "AIzaSyCGXJzzfy5pMg-UsKzGnIpHhT5t_JBl7oA",
+    authDomain: "restaurantdemo-cd179.firebaseapp.com",
+    projectId: "restaurantdemo-cd179",
+    storageBucket: "restaurantdemo-cd179.firebasestorage.app",
+    messagingSenderId: "104342150880",
+    appId: "1:104342150880:web:510818929d00d47c00fa85",
+    measurementId: "G-MMG8S0LPV8"
+  }
 };
-
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

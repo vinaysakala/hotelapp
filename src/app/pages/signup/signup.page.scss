@@ -1,0 +1,70 @@
+
+.login-background {
+    --background: #fafafa; 
+}
+
+.full-height-grid {
+    height: 100%;
+}
+
+.full-height-row {
+    height: 100%;
+}
+
+
+.login-card {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    box-shadow: none;
+    border-radius: 1px;
+    margin-bottom: 10px;
+}
+
+.signup-card {
+    background: #ffffff;
+    border: 1px solid #dbdbdb;
+    box-shadow: none;
+    border-radius: 1px;
+    margin-top: 10px;
+
+    a {
+        text-decoration: none;
+        font-weight: bold;
+        color: #0095f6;
+    }
+}
+
+
+.custom-input {
+    --background: #fafafa;
+    --border-radius: 3px;
+    --padding-start: 10px;
+    --padding-end: 10px;
+
+    --highlight-color-focused: #0095f6; 
+    color: #262626;
+
+    ion-label,
+    .label-text {
+        color: #8e8e8e !important;
+        font-size: 12px;
+    }
+
+   
+    margin-bottom: 4px;
+}
+
+.outside-icon {
+  font-size: 20px;
+}
+
+
+.err-txt {
+    color: red;
+    font-size: 12px;
+}
+
+
+ion-content {
+    --keyboard-offset: 0px !important;
+}
