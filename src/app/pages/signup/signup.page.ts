@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Auth, createUserWithEmailAndPassword } from '@angular/fire/auth';
+import { Auth, createUserWithEmailAndPassword, user } from '@angular/fire/auth';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { Firestore, doc, setDoc } from '@angular/fire/firestore';
@@ -12,6 +12,7 @@ import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 })
 export class SignupPage {
   signup = {
+    username: "",
     name: '',
     email: '',
     password: ''
@@ -41,6 +42,7 @@ export class SignupPage {
   passwordIcon = 'eye-outline';
 
   errormessage = {
+    usernameReq: '',
     nameReq: '',
     emailReq: '',
     passwordReq: ''
@@ -62,6 +64,9 @@ export class SignupPage {
 
   onBlur(ctrl: string) {
     switch (ctrl) {
+      case 'username':
+        this.errormessage.usernameReq = this.signup.username.trim() === '' ? 'User Name is required' : '';
+        break;
       case 'name':
         this.errormessage.nameReq = this.signup.name.trim() === '' ? 'Full Name is required' : '';
         break;
@@ -75,6 +80,7 @@ export class SignupPage {
   }
 
   async onSignup() {
+    this.onBlur('username');
     this.onBlur('name');
     this.onBlur('email');
     this.onBlur('password');
@@ -89,8 +95,11 @@ export class SignupPage {
       try {
         const userCredential = await createUserWithEmailAndPassword(this.auth, this.signup.email, this.signup.password);
         const uid = userCredential.user.uid;
-        await setDoc(doc(this.firestore, 'users', uid), {
+        const usernameId = this.signup.username.toLowerCase();
+
+        await setDoc(doc(this.firestore, 'users', usernameId), {
           uid: uid,
+          username: this.signup.username, // Keep original casing for display
           fullname: this.signup.name,
           email: this.signup.email,
           createdAt: new Date()
@@ -112,6 +121,8 @@ export class SignupPage {
         }
         this.showToast(msg, 'danger');
       }
+    } else {
+      this.showToast('provide mandatory Feilds', 'danger');
     }
   }
 

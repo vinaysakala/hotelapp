@@ -1,5 +1,6 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { Auth, signInWithEmailAndPassword } from '@angular/fire/auth';
+import { Firestore, collection, doc, getDoc, setDoc } from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { ToastController, LoadingController } from '@ionic/angular';
 
@@ -20,6 +21,7 @@ export class LoginPage {
     passwordReq: ''
   };
   deafultErrormessage = JSON.parse(JSON.stringify(this.errormessage));
+
 
   async showToast(msg: string, color: string) {
     const toast = await this.toastCtrl.create({
@@ -43,7 +45,7 @@ export class LoginPage {
     switch (ctrl) {
       case 'email':
         if (this.login.email == '') {
-          this.errormessage.emailReq = 'Email is required';
+          this.errormessage.emailReq = 'Email or username is required';
         } else {
           this.errormessage.emailReq = '';
         }
@@ -75,44 +77,69 @@ export class LoginPage {
     private router: Router,
     private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private ngZone: NgZone
+    private firestore: Firestore
   ) { }
 
   async onLogin() {
-    const loading = await this.loadingCtrl.create({ message: 'Logging in...' });
-    await loading.present();
-    if (this.login.email == '') {
-      this.errormessage.emailReq = 'Email is required';
-      await loading.dismiss();
-      return;
-    }
-    if (this.login.password == '') {
-      this.errormessage.passwordReq = 'Password is required';
-      await loading.dismiss();
-      return;
-    }
-    try {
-      await signInWithEmailAndPassword(this.auth, this.login.email, this.login.password);
-      await loading.dismiss();
-      await this.showToast('login successfully!', 'success');
-      this.clearForm();
-      this.router.navigate(['/tabs'], { replaceUrl: true });
-      
-    } catch (error: any) {
-      const toast = await this.toastCtrl.create({
-        message: 'Error: ' + error.message,
-        duration: 3000,
-        color: 'danger'
-      });
-      await toast.present();
-    } finally {
-      await loading.dismiss();
-    }
+  const loading = await this.loadingCtrl.create({ message: 'Logging in...' });
+  
+  // Basic Validation
+  if (!this.login.email || !this.login.password) {
+    this.showToast('Please enter both email/username and password', 'warning');
+    return;
   }
+
+  await loading.present();
+
+  let loginEmail = this.login.email.trim();
+
+  try {
+    if (!loginEmail.includes('@')) {
+      const userData: any = await this.checkUser(loginEmail.toLowerCase());
+      if (userData && userData.email) {
+        loginEmail = userData.email; 
+      } else {
+        throw new Error('User not found'); 
+      }
+    }
+    await signInWithEmailAndPassword(this.auth, loginEmail, this.login.password);
+    await loading.dismiss();
+    await this.showToast('Logged in successfully!', 'success');
+    this.clearForm();
+    this.router.navigate(['/tabs'], { replaceUrl: true });
+
+  } catch (error: any) {
+    await loading.dismiss();
+    let errorMessage = 'Invalid username or password.';
+    if (error.message === 'User not found') {
+      errorMessage = 'Username does not exist.';
+    } else if (error.code === 'auth/wrong-password') {
+      errorMessage = 'Incorrect password.';
+    }
+
+    const toast = await this.toastCtrl.create({
+      message: errorMessage,
+      duration: 3000,
+      color: 'danger'
+    });
+    await toast.present();
+  }
+}
 
   clearForm() {
     this.login = JSON.parse(JSON.stringify(this.defaultlogin));
     this.errormessage = JSON.parse(JSON.stringify(this.deafultErrormessage));
   }
 
+
+  async checkUser(username: string) {
+    const userRef = doc(this.firestore, `users/${username}`);
+    const snap = await getDoc(userRef);
+
+    if (snap.exists()) {
+      return snap.data(); // Returns the { email, uid... } object
+    } else {
+      return null;
+    }
+  }
 }

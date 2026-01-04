@@ -9,37 +9,24 @@
           </div>
 
           <ion-card-content>
-            <!-- <ion-row class="ion-align-items-center"> -->
-            <!-- <ion-col size="2">
-                <ion-icon name="person-outline" class="outside-icon"></ion-icon>
-              </ion-col> -->
-            <!-- <ion-col size="10"> -->
+            <ion-item lines="none" class="custom-input" [class.input-error]="errormessage.usernameReq">
+              <ion-input label="User Name" labelPlacement="floating" [(ngModel)]="signup.username"
+                (ionBlur)="onBlur('username')"></ion-input>
+            </ion-item>
+            <p class="err-txt">{{ errormessage.usernameReq }}</p>
+
             <ion-item lines="none" class="custom-input" [class.input-error]="errormessage.nameReq">
               <ion-input label="Full Name" labelPlacement="floating" [(ngModel)]="signup.name"
                 (ionBlur)="onBlur('name')"></ion-input>
             </ion-item>
             <p class="err-txt">{{ errormessage.nameReq }}</p>
-            <!-- </ion-col> -->
-            <!-- </ion-row> -->
 
-            <!-- <ion-row class="ion-align-items-center">
-              <ion-col size="2">
-                <ion-icon name="mail-outline" class="outside-icon"></ion-icon>
-              </ion-col> -->
-            <!-- <ion-col size="10"> -->
             <ion-item lines="none" class="custom-input" [class.input-error]="errormessage.emailReq">
               <ion-input type="email" label="Email" labelPlacement="floating" [(ngModel)]="signup.email"
                 (ionBlur)="onBlur('email')"></ion-input>
             </ion-item>
             <p class="err-txt">{{ errormessage.emailReq }}</p>
-            <!-- </ion-col> -->
-            <!-- </ion-row> -->
-
-            <!-- <ion-row class="ion-align-items-center">
-              <ion-col size="2">
-                <ion-icon name="lock-closed-outline" class="outside-icon"></ion-icon>
-              </ion-col>
-              <ion-col size="10"> -->
+        
             <ion-item lines="none" class="custom-input" [class.input-error]="errormessage.passwordReq">
               <ion-input [type]="passwordType" label="Password" labelPlacement="floating" [(ngModel)]="signup.password"
                 (ionBlur)="onBlur('password')"></ion-input>
@@ -48,8 +35,6 @@
               </ion-button>
             </ion-item>
             <p class="err-txt">{{ errormessage.passwordReq }}</p>
-            <!-- </ion-col>
-            </ion-row> -->
 
             <ion-button expand="block" (click)="onSignup()" class="login-btn">
               Sign Up
