@@ -21,6 +21,22 @@ const routes: Routes = [
     path: 'tabs', 
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'category',
+    loadChildren: () => import('./pages/masters/category/category.module').then( m => m.CategoryPageModule)
+  },
+  {
+    path: 'menu-items',
+    loadChildren: () => import('./pages/masters/menu-items/menu-items.module').then( m => m.MenuItemsPageModule)
+  },
+  {
+    path: 'tables',
+    loadChildren: () => import('./pages/masters/tables/tables.module').then( m => m.TablesPageModule)
+  },
+  {
+    path: 'staff',
+    loadChildren: () => import('./pages/masters/staff/staff.module').then( m => m.StaffPageModule)
   }
 ];
 @NgModule({

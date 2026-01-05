@@ -1,0 +1,44 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Category</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content style="--background: #ffffff;">
+  <ion-toolbar color="white" class="ion-no-border">
+    <ion-searchbar placeholder="Search categories..." class="custom-searchbar" (ionInput)="filterCategories($event)">
+    </ion-searchbar>
+  </ion-toolbar>
+
+  <div *ngIf="categories.length === 0" class="ion-text-center ion-padding mt-5">
+    <ion-icon name="grid-outline" style="font-size: 64px; color: #ccc;"></ion-icon>
+    <p style="color: #999;">No categories found. Tap '+' to add one.</p>
+  </div>
+
+  <div class="card-container">
+    <ion-card mode="ios" *ngFor="let cat of filteredCategories" class="category-card">
+      <ion-item lines="none">
+        <ion-icon slot="start" [name]="cat.icon || 'folder'" color="primary"></ion-icon>
+        <ion-label>
+          <h2>{{ cat.name }}</h2>
+          <p>{{ cat.status }}</p>
+        </ion-label>
+        <ion-button fill="clear" slot="end" (click)="editCategory(cat)">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button fill="clear" slot="end" color="danger" (click)="deleteCategory(cat.id)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-item>
+    </ion-card>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openAddModal()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
