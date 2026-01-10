@@ -1,0 +1,54 @@
+.kds-grid {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  gap: 15px;
+}
+
+
+ion-header {
+  ion-toolbar {
+    &.header-toolbar {
+      --background: #2563eb;
+      --color: white;
+    }
+  }
+}
+
+.order-ticket {
+  width: 300px;
+  background: #ffffff;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
+  .ticket-header {
+    background: #f4f5f8;
+    padding: 12px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #ddd;
+    
+    .table-name { font-weight: 800; font-size: 1.2rem; color: #000; }
+    .order-time { color: #e67e22; font-weight: 600; }
+  }
+
+  .item-list {
+    background: transparent;
+    padding: 5px 0;
+    
+    .item-display {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #333;
+      .qty { color: #27ae60; font-weight: 800; margin-right: 5px; }
+    }
+  }
+
+  .ticket-footer {
+    padding: 10px;
+    background: #fff;
+  }
+}

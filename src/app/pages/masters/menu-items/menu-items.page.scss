@@ -1,0 +1,99 @@
+ion-header {
+  ion-toolbar {
+    &.header-toolbar {
+      --background: #2563eb;
+      --color: white;
+    }
+  }
+}
+
+.category-scroll {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  
+  // 1. Change background to a very light tint to define the "track"
+  background: #f8f9fa; 
+  padding: 12px 10px;
+  gap: 10px;
+  
+  // 2. Add a subtle bottom border to separate it from the item cards
+  border-bottom: 1px solid #eee;
+  
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar { display: none; }
+
+  ion-chip {
+    flex-shrink: 0;
+    padding-inline: 22px; 
+    height: 38px; 
+    min-width: 90px;
+    justify-content: center;
+    font-weight: 500;
+    margin: 0;
+    
+    // 3. Make the unselected chips white so they "pop" against the grey background
+    --background: #ffffff; 
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  }
+
+  // 4. Style for the Active/Selected chip
+  ion-chip[outline="false"] {
+    --background: var(--ion-color-primary);
+    color: #fff;
+    border: 1px solid var(--ion-color-primary);
+    box-shadow: 0 4px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+  }
+}
+
+ion-chip[outline="false"] {
+  --background: var(--ion-color-primary);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.2);
+}
+
+.card-container {
+  padding: 7px;
+  padding-bottom: 90px;
+}
+
+.menu-card {
+  margin-bottom: 12px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  .item-name { font-weight: 500; font-size: 0.9rem; }
+  .category-label { font-size: 0.8rem; color: #888; text-transform: uppercase; }
+  .price-text { color: #3060d8fc; font-weight: 600; margin-top: 4px; }
+}
+
+.type-indicator {
+  width: 18px;
+  height: 18px;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 2px;
+  margin-right: 12px;
+  
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  
+  &.veg { border-color: #27ae60; .dot { background: #27ae60; } }
+  &.non-veg { border-color: #c0392b; .dot { background: #c0392b; } }
+}
+
+.custom-searchbar {
+  --background: #ffffff;
+  --border-radius: 15px;
+  --box-shadow: none;
+   max-width: 95%; 
+  margin: 0 auto; 
+  height: 45px;
+  border: 1px solid #dadada; 
+  padding-left: 10px;
+  padding-right: 10px;
+}

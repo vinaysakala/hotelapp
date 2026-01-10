@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, doc, deleteDoc,updateDoc } from '@angular/fire/firestore';
 import { AlertController } from '@ionic/angular';
-import { updateDoc } from '@angular/fire/firestore';
 import { LoadingController, ToastController } from '@ionic/angular';
 
 @Component({

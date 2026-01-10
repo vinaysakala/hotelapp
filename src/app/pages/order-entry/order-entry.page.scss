@@ -1,0 +1,150 @@
+.order-item-card {
+  margin: 8px 12px;
+  background: #1a1a1a; // Dark card for high contrast
+  color: white;
+  border-radius: 12px;
+
+  .item-name { font-weight: 600; font-size: 1rem; color: #fff; }
+  
+  .price-text { 
+    color: #ffce00; // Bright yellow price
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  
+  .qty-label {
+    padding: 0 10px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+
+  ion-button {
+    --padding-start: 0;
+    --padding-end: 0;
+    font-size: 1.5rem;
+  }
+}
+
+.type-indicator {
+  width: 16px; height: 16px; border: 2px solid; border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  &.veg { border-color: #27ae60; .dot { background: #27ae60; width: 6px; height: 6px; border-radius: 50%; } }
+  &.non-veg { border-color: #c0392b; .dot { background: #c0392b; width: 6px; height: 6px; border-radius: 50%; } }
+}
+
+
+.total-section {
+  border-top: 2px dashed #eee;
+  margin-top: 20px;
+  
+  h1 {
+    color: #000;
+    margin: 0;
+  }
+}
+
+.confirm-btn {
+  height: 55px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  --box-shadow: 0 4px 15px rgba(var(--ion-color-success-rgb), 0.4);
+}
+
+// Modern Bottom Sheet look
+ion-modal {
+  --border-radius: 25px;
+  --height: 80%;
+}
+
+ion-header {
+  ion-toolbar {
+    &.header-toolbar {
+      --background: #2563eb;
+      --color: white;
+    }
+  }
+}
+
+
+
+.category-scroll {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  
+  // 1. Change background to a very light tint to define the "track"
+  background: #f8f9fa; 
+  padding: 12px 10px;
+  gap: 10px;
+  
+  // 2. Add a subtle bottom border to separate it from the item cards
+  border-bottom: 1px solid #eee;
+  
+  -webkit-overflow-scrolling: touch;
+  &::-webkit-scrollbar { display: none; }
+
+  ion-chip {
+    flex-shrink: 0;
+    padding-inline: 22px; 
+    height: 38px; 
+    min-width: 90px;
+    justify-content: center;
+    font-weight: 500;
+    margin: 0;
+    
+    // 3. Make the unselected chips white so they "pop" against the grey background
+    --background: #ffffff; 
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+  }
+
+  // 4. Style for the Active/Selected chip
+  ion-chip[outline="false"] {
+    --background: var(--ion-color-primary);
+    color: #fff;
+    border: 1px solid var(--ion-color-primary);
+    box-shadow: 0 4px 8px rgba(var(--ion-color-primary-rgb), 0.3);
+  }
+}
+
+ion-chip[outline="false"] {
+  --background: var(--ion-color-primary);
+  color: #2f1fc5;
+  box-shadow: 0 4px 10px rgba(var(--ion-color-primary-rgb), 0.2);
+}
+
+
+.custom-searchbar {
+  --background: #ffffff;
+  --border-radius: 15px;
+  --box-shadow: none;
+   max-width: 95%; 
+  margin: 0 auto; 
+  height: 45px;
+  border: 1px solid #dadada; 
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+
+/* The Bounce Animation */
+@keyframes cart-bounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.animate-bounce {
+  animation: cart-bounce 0.3s ease-in-out;
+}
+
+.cart-toolbar {
+  transition: all 0.3s ease; 
+}

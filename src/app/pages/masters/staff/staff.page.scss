@@ -1,0 +1,71 @@
+ion-header {
+  ion-toolbar {
+    &.header-toolbar {
+      --background: #2563eb;
+      --color: white;
+    }
+  }
+}
+
+.card-container {
+  padding: 10px;
+  padding-bottom: 90px;
+}
+
+.staff-card {
+  margin-bottom: 12px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  .staff-avatar {
+    width: 48px;
+    height: 48px;
+    margin-right: 15px;
+    
+    .initial-circle {
+      width: 100%;
+      height: 100%;
+      background: #f4f5f8;
+      color: var(--ion-color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border-radius: 50%;
+    }
+  }
+
+  .staff-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 2px; }
+  .staff-email { font-size: 0.85rem; color: #666; margin-bottom: 5px; }
+
+  .action-group {
+    display: flex;
+    flex-direction: column;
+    ion-button { --padding-start: 0; --padding-end: 0; height: 30px; }
+  }
+}
+
+.form-container {
+  padding-top: 10px;
+}
+
+.role-item {
+  --padding-start: 0;
+  margin-bottom: 5px;
+  border: 1px solid #f0f0f0;
+  border-radius: 8px;
+  
+  ion-icon {
+    margin-left: 4px;
+    margin-right: 10px;
+    font-size: 20px;
+  }
+}
+
+.main-btn {
+  --border-radius: 8px;
+  height: 50px;
+  margin-top: 25px;
+}

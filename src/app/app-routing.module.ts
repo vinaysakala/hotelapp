@@ -37,6 +37,14 @@ const routes: Routes = [
   {
     path: 'staff',
     loadChildren: () => import('./pages/masters/staff/staff.module').then( m => m.StaffPageModule)
+  },
+  {
+    path: 'order-entry',
+    loadChildren: () => import('./pages/order-entry/order-entry.module').then( m => m.OrderEntryPageModule)
+  },
+  {
+    path: 'kds',
+    loadChildren: () => import('./pages/kds/kds.module').then( m => m.KdsPageModule)
   }
 ];
 @NgModule({

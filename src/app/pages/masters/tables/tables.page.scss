@@ -1,0 +1,48 @@
+.header-toolbar { --background: #ffffff; }
+
+
+ion-header {
+  ion-toolbar {
+    &.header-toolbar {
+      --background: #2563eb;
+      --color: white;
+    }
+  }
+}
+.stats-row {
+  padding: 15px 15px 5px 15px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.table-card {
+  margin: 8px;
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+
+  .status-indicator {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .table-icon { font-size: 40px; margin-bottom: 10px; }
+  .table-number { font-weight: 700; margin: 5px 0; color: #333; }
+  .capacity { font-size: 0.85rem; color: #888; margin-bottom: 10px; }
+
+  .action-buttons {
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #f0f0f0;
+    margin-top: 10px;
+    ion-button { height: 35px; }
+  }
+}
+
+.bg-success { background: var(--ion-color-success); }
+.bg-danger { background: var(--ion-color-danger); }

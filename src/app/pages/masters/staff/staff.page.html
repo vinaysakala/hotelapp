@@ -1,16 +1,97 @@
-<ion-header shadow="none">
-  <ion-toolbar color="primary">
+<ion-header class="ion-no-border">
+  <ion-toolbar class="header-toolbar">
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
     </ion-buttons>
-    <ion-title>Staff</ion-title>
+    <ion-title>Staff Management</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">staff</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content style="--background: #ffffff;">
+  <div class="card-container">
+    <ion-card mode="ios" *ngFor="let member of staffList" class="staff-card">
+      <ion-item lines="none">
+        <ion-avatar slot="start" class="staff-avatar">
+          <div class="initial-circle">{{ member.name.charAt(0) }}</div>
+        </ion-avatar>
+
+        <ion-label>
+          <h2 class="staff-name">{{ member.name }}</h2>
+          <p class="staff-email">{{ member.email }}</p>
+          <ion-badge [color]="getRoleColor(member.role)" mode="ios">
+            {{ member.role }}
+          </ion-badge>
+        </ion-label>
+
+        <div slot="end" class="action-group">
+          <ion-button fill="clear" (click)="editStaff(member)">
+            <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+          <ion-button fill="clear" color="danger" (click)="deleteStaff(member.id)">
+            <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-item>
+    </ion-card>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button (click)="openAddStaff()">
+      <ion-icon name="person-add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>
+
+<ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="isModalOpen = false">
+  <ng-template>
+    <ion-header class="ion-no-border">
+      <ion-toolbar color="primary">
+        <ion-title>{{ editingMember ? 'Edit Staff' : 'Add Staff' }}</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModal()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+    <ion-content class="ion-padding">
+      <div class="form-container">
+        <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+          <ion-label position="stacked">Full Name</ion-label>
+          <ion-input [(ngModel)]="staffForm.name" placeholder="Enter name"></ion-input>
+        </ion-item>
+
+        <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+          <ion-label position="stacked">Email Address</ion-label>
+          <ion-input type="email" [(ngModel)]="staffForm.email" placeholder="email@restaurant.com"></ion-input>
+        </ion-item>
+
+        <ion-list>
+          <ion-radio-group [(ngModel)]="staffForm.role">
+            <ion-list-header>
+              <ion-label>Assign Role</ion-label>
+            </ion-list-header>
+
+            <ion-item lines="none" class="role-item">
+              <ion-icon name="shield-half-outline" slot="start" color="danger"></ion-icon>
+              <ion-radio value="Admin">Admin</ion-radio>
+            </ion-item>
+
+            <ion-item lines="none" class="role-item">
+              <ion-icon name="restaurant-outline" slot="start" color="success"></ion-icon>
+              <ion-radio value="Waiter">Waiter</ion-radio>
+            </ion-item>
+
+            <ion-item lines="none" class="role-item">
+              <ion-icon name="flame-outline" slot="start" color="warning"></ion-icon>
+              <ion-radio value="Chef">Chef</ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+
+        <ion-button expand="block" (click)="saveStaff()" class="ion-margin-top main-btn">
+          {{ editingMember ? 'Update Staff Member' : 'Add Staff Member' }}
+        </ion-button>
+      </div>
+    </ion-content>
+  </ng-template>
+</ion-modal>

@@ -1,17 +1,37 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Tab 1
-    </ion-title>
+<ion-header class="ion-no-border">
+  <ion-toolbar class="header-toolbar">
+    <ion-title>Live Tables</ion-title>
+    <ion-buttons slot="end">
+      <ion-badge color="success" mode="ios" class="ion-margin-end">
+        {{ getCount('Available') }} Free
+      </ion-badge>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
-
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+<ion-content style="--background: #f8f9fa;">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" *ngFor="let table of tables">
+        <ion-card 
+          mode="ios" 
+          [ngClass]="table.status === 'Available' ? 'available-card' : 'occupied-card'"
+          (click)="handleTableClick(table)">
+          
+          <ion-card-content class="ion-text-center">
+            <div class="table-circle">
+              <ion-icon name="restaurant"></ion-icon>
+            </div>
+            
+            <h2 class="table-title">{{ table.tableName }}</h2>
+            <p class="table-subtitle">{{ table.status }}</p>
+            
+            <div *ngIf="table.status === 'Occupied'" class="amount-tag">
+              ₹{{ table.currentTotal || 0 }}
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
