@@ -1,0 +1,81 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Billing: <b>{{ tableName }}</b></ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="receipt-container">
+    <div class="receipt-header">
+      <h3>ORDER SUMMARY</h3>
+      <p>{{ orderDate | date:'medium' }}</p>
+    </div>
+
+    <div class="receipt-body">
+      <div class="items-list">
+        <div class="item-row header">
+          <span class="name">Item</span>
+          <span class="qty">Qty</span>
+          <span class="price">Amount</span>
+        </div>
+
+        <div class="item-row" *ngFor="let item of orderItems">
+          <span class="name">{{ item.name }}</span>
+          <span class="qty">{{ item.qty }}</span>
+          <span class="price">₹{{ (item.price * item.qty).toFixed(2) }}</span>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="totals-section">
+        <div class="total-row subtotal">
+          <span>Sub Total</span>
+          <span>₹{{ subtotal.toFixed(2) }}</span>
+        </div>
+
+        <div class="total-row tax-row">
+          <span>CGST (2.5%)</span>
+          <span>₹{{ (tax / 2).toFixed(2) }}</span>
+        </div>
+        <div class="total-row tax-row">
+          <span>SGST (2.5%)</span>
+          <span>₹{{ (tax / 2).toFixed(2) }}</span>
+        </div>
+
+        <div class="divider-thin"></div>
+
+        <div class="total-row grand-total">
+          <span>GRAND TOTAL</span>
+          <span>₹{{ grandTotal.toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="payment-section ion-margin-top">
+    <ion-label><b>Select Payment Mode</b></ion-label>
+    <ion-segment [(ngModel)]="paymentMode" mode="ios" class="ion-margin-top">
+      <ion-segment-button value="Cash">
+        <ion-label>Cash</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="Card">
+        <ion-label>Card</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="UPI">
+        <ion-label>UPI</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+</ion-content>
+
+<ion-footer class="ion-no-border">
+  <ion-toolbar class="ion-padding">
+    <ion-button expand="block" color="success" shape="round" class="settle-btn" (click)="settleBill()">
+      COMPLETE PAYMENT & CLEAR TABLE
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

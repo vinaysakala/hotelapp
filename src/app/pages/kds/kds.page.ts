@@ -14,11 +14,8 @@ export class KdsPage implements OnInit {
 
   ngOnInit() {
     const ordersRef = collection(this.firestore, 'liveOrders');
-    // Only show orders that are not yet "Ready"
     const q = query(ordersRef, where('status', '==', 'Pending'));
-    
     collectionData(q, { idField: 'id' }).subscribe(res => {
-      // Sort by oldest first so Chef handles first-in-first-out
       this.activeOrders = res.sort((a: any, b: any) => a.createdAt - b.createdAt);
     });
   }

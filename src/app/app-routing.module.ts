@@ -45,6 +45,10 @@ const routes: Routes = [
   {
     path: 'kds',
     loadChildren: () => import('./pages/kds/kds.module').then( m => m.KdsPageModule)
+  },
+  {
+    path: 'billing',
+    loadChildren: () => import('./pages/billing/billing.module').then( m => m.BillingPageModule)
   }
 ];
 @NgModule({

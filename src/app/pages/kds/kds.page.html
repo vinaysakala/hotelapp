@@ -9,29 +9,37 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content style="--background: #010000;">
+
+<ion-content style="--background: #ffffff;">
   <div class="kds-grid">
     <div class="order-ticket" *ngFor="let order of activeOrders">
-      <div class="ticket-header">
-        <span class="table-name">{{ order.tableName }}</span>
-        <span class="order-time">{{ getTimeDifference(order.createdAt) }}m ago</span>
+      <div class="ticket-header" [ngClass]="getTimeDifference(order.createdAt) > 10 ? 'urgent' : 'normal'">
+        <div class="header-main">
+          <span class="table-badge">{{ order.tableName }}</span>
+          <span class="timer">
+            <ion-icon name="time-outline"></ion-icon> 
+            {{ getTimeDifference(order.createdAt) }}m ago
+          </span>
+        </div>
       </div>
 
       <div class="ticket-body">
-        <ion-list lines="none" class="item-list">
-          <ion-item *ngFor="let item of order.items">
-            <ion-label>
-              <h2 class="item-display">
-                <span class="qty">{{ item.qty }}x</span> {{ item.name }}
-              </h2>
-            </ion-label>
-            <ion-icon name="ellipse" [color]="item.type === 'Veg' ? 'success' : 'danger'" slot="end" size="small"></ion-icon>
-          </ion-item>
-        </ion-list>
+        <div class="item-row" *ngFor="let item of order.items">
+          <div class="qty-box">{{ item.qty }}</div>
+          
+          <div class="item-details">
+            <h2 class="item-name">{{ item.name | uppercase }}</h2>
+            <p class="item-category" *ngIf="item.type">
+               <ion-icon name="ellipse" [color]="item.type === 'Veg' ? 'success' : 'danger'"></ion-icon>
+               {{ item.type }}
+            </p>
+          </div>
+        </div>
       </div>
 
       <div class="ticket-footer">
-        <ion-button expand="block" color="success" (click)="completeOrder(order)">
+        <ion-button expand="block" mode="ios" (click)="completeOrder(order)">
+          <ion-icon name="checkmark-done-circle" slot="start"></ion-icon>
           MARK AS READY
         </ion-button>
       </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Firestore, collection, collectionData } from '@angular/fire/firestore';
-import { NavController } from '@ionic/angular';
+import { NavController, ActionSheetController } from '@ionic/angular'; // Added ActionSheetController
 
 @Component({
   selector: 'app-tab1',
@@ -13,7 +13,8 @@ export class Tab1Page implements OnInit {
 
   constructor(
     private firestore: Firestore,
-    private navCtrl: NavController
+    private navCtrl: NavController,
+    private actionSheetCtrl: ActionSheetController 
   ) {}
 
   ngOnInit() {
@@ -27,13 +28,56 @@ export class Tab1Page implements OnInit {
     return this.tables.filter(t => t.status === status).length;
   }
 
-  handleTableClick(table: any) {
-    // Navigate to the Order Entry page and pass the table ID
+  async handleTableClick(table: any) {
+    if (table.status === 'Occupied') {
+      const actionSheet = await this.actionSheetCtrl.create({
+        header: `Table ${table.tableName}`,
+        subHeader: 'Select Action',
+        mode: 'ios',
+        buttons: [
+          {
+            text: 'Add / View Items',
+            icon: 'restaurant-outline',
+            handler: () => {
+              this.goToOrderEntry(table);
+            }
+          },
+          {
+            text: 'Generate Bill',
+            icon: 'receipt-outline',
+            cssClass: 'billing-button',
+            handler: () => {
+              this.goToBilling(table);
+            }
+          },
+          {
+            text: 'Cancel',
+            icon: 'close',
+            role: 'cancel'
+          }
+        ]
+      });
+      await actionSheet.present();
+    } else {
+      this.goToOrderEntry(table);
+    }
+  }
+
+  private goToOrderEntry(table: any) {
     this.navCtrl.navigateForward(['/order-entry'], {
       queryParams: { 
         tableId: table.id, 
         tableName: table.tableName 
       }
     });
-  } 
+  }
+
+  private goToBilling(table: any) {
+    this.navCtrl.navigateForward(['/billing'], {
+      queryParams: { 
+        tableId: table.id, 
+        tableName: table.tableName 
+      }
+    });
+  }
 }
