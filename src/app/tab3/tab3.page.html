@@ -1,30 +1,86 @@
 <ion-header class="ion-no-border">
   <ion-toolbar class="header-toolbar">
-    <ion-title>Profile</ion-title>
+    <ion-title>Account</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="profile-content">
-  <div class="profile-image-wrapper">
-    <img src="https://ionicframework.com/docs/img/demos/avatar.svg" alt="Profile" class="profile-image" />
+<ion-content class="ion-padding" style="--background: #ffffff;">
+  <div class="user-info ion-text-center ion-margin-bottom">
+    <ion-avatar style="margin: 0 auto; width: 80px; height: 80px;">
+      <div class="initial-circle"
+        style="background: var(--ion-color-secondary); color: white; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 32px;">
+        {{ userData?.fullname?.charAt(0) }}
+      </div>
+    </ion-avatar>
+    <h2>{{ userData?.fullname }}</h2>
+    <ion-badge color="tertiary" style="margin-top: 3px;">{{ userData?.role }}</ion-badge>
   </div>
 
-  <div class="profile-info ion-padding">
-    <div class="full-name">{{ userData?.fullname || 'Vinay Sakala' }}</div>
+  <ion-card>
+    <ion-item button (click)="openChangePassword()">
+      <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+      <ion-label>Change Password</ion-label>
+    </ion-item>
+  </ion-card>
 
-
-
-    <ion-row class="ion-margin-top">
-      <ion-col size="12">
-        <ion-button expand="block" fill="outline" color="primary" class="action-btn">
-          Edit Profile
-        </ion-button>
-      </ion-col>
-      <ion-col size="12">
-        <ion-button expand="block" fill="outline" color="danger" class="action-btn" (click)="onSignOut()">
-          Sign Out
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </div>
+  <ion-card>
+    <ion-item button color="danger" (click)="logout()">
+      <ion-icon name="log-out-outline" slot="start"></ion-icon>
+      <ion-label>Logout</ion-label>
+    </ion-item>
+  </ion-card>
 </ion-content>
+
+<ion-modal [isOpen]="isModalOpen" (ionModalDidDismiss)="isModalOpen = false">
+  <ng-template>
+    <ion-header>
+      <ion-toolbar color="primary">
+        <ion-title>Update Password</ion-title>
+        <ion-buttons slot="end">
+          <ion-button (click)="closeModal()">Close</ion-button>
+        </ion-buttons>
+      </ion-toolbar>
+    </ion-header>
+
+
+    <ion-content class="ion-padding">
+
+      <div class="ion-margin-bottom">
+        <ion-item fill="outline" mode="md">
+          <ion-label position="stacked">Current Password</ion-label>
+          <ion-input [type]="showOld ? 'text' : 'password'" [(ngModel)]="pwForm.oldPassword">
+            <ion-button fill="clear" slot="end" (click)="showOld = !showOld" style="margin: 0;">
+              <ion-icon [name]="showOld ? 'eye-off-outline' : 'eye-outline'" slot="icon-only" color="medium"></ion-icon>
+            </ion-button>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <div class="ion-margin-bottom">
+        <ion-item fill="outline" mode="md">
+          <ion-label position="stacked">New Password</ion-label>
+          <ion-input [type]="showNew ? 'text' : 'password'" [(ngModel)]="pwForm.newPassword">
+            <ion-button fill="clear" slot="end" (click)="showNew = !showNew" style="margin: 0;">
+              <ion-icon [name]="showNew ? 'eye-off-outline' : 'eye-outline'" slot="icon-only" color="medium"
+                class="icon-style"></ion-icon>
+            </ion-button>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <ion-item fill="outline" mode="md">
+        <ion-label position="stacked">Confirm New Password</ion-label>
+        <ion-input [type]="showConfirm ? 'text' : 'password'" [(ngModel)]="pwForm.confirmPassword">
+          <ion-button fill="clear" slot="end" (click)="showConfirm = !showConfirm" style="margin: 0;">
+            <ion-icon [name]="showConfirm ? 'eye-off-outline' : 'eye-outline'" slot="icon-only"
+              color="medium"></ion-icon>
+          </ion-button>
+        </ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="updatePassword()" class="ion-margin-top">
+        Save New Password
+      </ion-button>
+    </ion-content>
+  </ng-template>
+</ion-modal>

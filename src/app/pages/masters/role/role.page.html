@@ -1,0 +1,45 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab2"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Staff Roles</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="ion-padding" style="--background: #ffffff;">
+  <div class="admin-card">
+    <h3 class="section-title">Create New Role</h3>
+    <ion-item lines="none" class="custom-input">
+      <ion-input [(ngModel)]="roleName" placeholder="e.g. Supervisor"></ion-input>
+      <ion-button slot="end" (click)="addRole()" [disabled]="!roleName">
+        <ion-icon name="add-outline" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </div>
+
+  <h4 class="section-title">Existing Roles</h4>
+  <ion-card *ngFor="let role of roles | async">
+    <ion-item-sliding>
+      <ion-item class="role-item" lines="none">
+        <ion-icon name="people-circle-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h2>{{ role.roleName }}</h2>
+        </ion-label>
+        
+        <ion-buttons slot="end">
+          <ion-button fill="clear" [routerLink]="['/permission', role.id]">
+            <ion-icon name="settings-outline" slot="icon-only"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="confirmDelete(role)">
+          <ion-icon name="trash" slot="icon-only"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-card>
+</ion-content>

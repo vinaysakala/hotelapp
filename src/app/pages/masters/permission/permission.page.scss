@@ -1,0 +1,37 @@
+ion-header {
+  ion-toolbar {
+    &.header-toolbar {
+      --background: #2563eb;
+      --color: white;
+    }
+  }
+}
+
+
+.admin-card {
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.custom-input {
+  --border-radius: 8px;
+}
+
+.role-item {
+  gap: 10px;
+  border-radius: 12px;
+}
+
+.permission-group {
+  margin: 15px;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.section-title {
+  margin: 20px 0 10px 10px;
+  font-weight: bold;
+  color: #6c4ee6;
+}

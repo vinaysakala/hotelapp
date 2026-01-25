@@ -1,0 +1,44 @@
+<ion-header class="ion-no-border">
+  <ion-toolbar class="header-toolbar">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/role"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ roleData?.roleName }} Permissions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content style="--background: #ffffff;">
+  <div class="permission-group">
+    <h4 class="section-title">OPERATIONS</h4>
+    <ion-item>
+      <ion-icon name="restaurant-outline" slot="start"></ion-icon>
+      <ion-label>Manage Tables</ion-label>
+      <ion-toggle [(ngModel)]="roleData.canManageTables" (ionChange)="update('canManageTables', $event)"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="fast-food-outline" slot="start"></ion-icon>
+      <ion-label>View Kitchen (KDS)</ion-label>
+      <ion-toggle [(ngModel)]="roleData.canViewKDS" (ionChange)="update('canViewKDS', $event)"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="grid-outline" slot="start"></ion-icon>
+      <ion-label>View Masters</ion-label>
+      <ion-toggle [(ngModel)]="roleData.canViewMasters" (ionChange)="update('canViewMasters', $event)"></ion-toggle>
+    </ion-item>
+  </div>
+
+  <div class="permission-group">
+    <h4 class="section-title">FINANCIAL</h4>
+    <ion-item>
+      <ion-icon name="receipt-outline" slot="start"></ion-icon>
+      <ion-label>Generate Billing</ion-label>
+      <ion-toggle [(ngModel)]="roleData.canBilling" (ionChange)="update('canBilling', $event)"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-icon name="stats-chart-outline" slot="start"></ion-icon>
+      <ion-label>View Sales Reports</ion-label>
+      <ion-toggle [(ngModel)]="roleData.canViewSales" (ionChange)="update('canViewSales', $event)"></ion-toggle>
+    </ion-item>
+  </div>
+</ion-content>

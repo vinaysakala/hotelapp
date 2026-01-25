@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Auth, signOut, onAuthStateChanged } from '@angular/fire/auth';
-import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { Auth, signOut } from '@angular/fire/auth';
 import { Firestore, doc, getDoc } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
+import { ToastController, LoadingController } from '@ionic/angular';
+import { EmailAuthProvider, reauthenticateWithCredential, updatePassword } from '@angular/fire/auth';
+import { PermissionService } from '../services/permission';
 
 @Component({
   selector: 'app-tab3',
@@ -12,67 +14,111 @@ import { Firestore, doc, getDoc } from '@angular/fire/firestore';
 })
 
 export class Tab3Page implements OnInit {
-  userData: any = '';
+
+  showOld: boolean = false;
+  showNew: boolean = false;
+  showConfirm: boolean = false;
+  isModalOpen = false;
+  userData: any = null;
+  pwForm = {
+    oldPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  };
+
+
   constructor(
     private auth: Auth,
+    private firestore: Firestore,
     private router: Router,
-    private alertCtrl: AlertController,
+    private toastCtrl: ToastController,
     private loadingCtrl: LoadingController,
-    private firestore: Firestore
+    private permission: PermissionService
   ) { }
 
-  ngOnInit() {
-    onAuthStateChanged(this.auth, (user) => {
-      if (user) {
-        this.getUserProfile(user.uid);
-      } else {
-        console.log('No user logged in');
-      }
-    });
+  async ngOnInit() {
+    await this.loadUserProfile();
   }
 
-  async getUserProfile(uid: string) {
-    try {
-      const userDocRef = doc(this.firestore, 'users', uid);
-      const userDocSnap = await getDoc(userDocRef);
-
-      if (userDocSnap.exists()) {
-        this.userData = userDocSnap.data();
-      } else {
-        console.log('No user document found!');
+  async loadUserProfile() {
+    const user = this.auth.currentUser;
+    if (user) {
+      const userDoc = await getDoc(doc(this.firestore, `users/${user.uid}`));
+      if (userDoc.exists()) {
+        this.userData = userDoc.data();
       }
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
     }
   }
 
-  async onSignOut() {
-    const alert = await this.alertCtrl.create({
-      header: 'Confirm Logout',
-      message: 'Are you sure you want to log out?',
-      buttons: [
-        { text: 'Cancel', role: 'cancel' },
-        {
-          text: 'Logout',
-          role: 'destructive',
-          handler: async () => {
-            const loading = await this.loadingCtrl.create({ message: 'Signing out...' });
-            await loading.present();
-
-            try {
-              await signOut(this.auth);
-              await loading.dismiss();
-              // Navigate to login and prevent going back
-              this.router.navigateByUrl('/login', { replaceUrl: true });
-            } catch (error) {
-              await loading.dismiss();
-              console.error('Logout error', error);
-            }
-          }
-        }
-      ]
-    });
-
-    await alert.present();
+  async logout() {
+    const loading = await this.loadingCtrl.create({ message: 'Logging out...' });
+    await loading.present();
+    try {
+      await signOut(this.auth);
+      // Clear any local storage if you used it
+      this.permission.clearCache()
+      localStorage.clear();
+      await loading.dismiss();
+      this.router.navigate(['/login'], { replaceUrl: true });
+    } catch (error) {
+      await loading.dismiss();
+      this.showToast('Logout failed', 'danger');
+    }
   }
+
+  async showToast(msg: string, color: string) {
+    const toast = await this.toastCtrl.create({
+      message: msg,
+      duration: 2000,
+      color: color
+    });
+    await toast.present();
+  }
+
+  async openChangePassword() {
+    this.isModalOpen = true;
+  }
+
+  async updatePassword() {
+    const { oldPassword, newPassword, confirmPassword } = this.pwForm;
+    const user = this.auth.currentUser;
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      this.showToast('All fields are required', 'warning');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      this.showToast('Passwords do not match', 'danger');
+      return;
+    }
+    const loading = await this.loadingCtrl.create({ message: 'Updating...' });
+    await loading.present();
+    try {
+      if (user && user.email) {
+        const credential = EmailAuthProvider.credential(user.email, oldPassword);
+        await reauthenticateWithCredential(user, credential);
+        await updatePassword(user, newPassword);
+        await loading.dismiss();
+        this.showToast('Password updated successfully!', 'success');
+        this.isModalOpen = false;
+        this.pwForm = { oldPassword: '', newPassword: '', confirmPassword: '' }; // Reset form
+      }
+    } catch (error: any) {
+      await loading.dismiss();
+      console.error(error);
+      let msg = 'Error updating password';
+      if (error.code === 'auth/wrong-password') msg = 'Incorrect current password';
+      this.showToast(msg, 'danger');
+    }
+  }
+
+
+  closeModal() {
+    this.isModalOpen = false;
+    this.showOld = false;
+    this.showNew = false;
+    this.showConfirm = false;
+    this.pwForm = { oldPassword: '', newPassword: '', confirmPassword: '' };
+  }
+
+
 }

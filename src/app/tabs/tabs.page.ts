@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
+import { PermissionService } from '../services/permission';
 
 @Component({
   selector: 'app-tabs',
@@ -6,8 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['tabs.page.scss'],
   standalone: false,
 })
-export class TabsPage {
+export class TabsPage implements OnInit {
+  permissions: any = {};
 
-  constructor() {}
+  constructor(private permService: PermissionService) {}
 
+  async ngOnInit() {
+    this.permissions = await this.permService.getPermissions();
+  }
 }

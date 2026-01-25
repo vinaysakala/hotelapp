@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Firestore, collection, collectionData, addDoc, doc, deleteDoc, updateDoc } from '@angular/fire/firestore';
-import { AlertController, ToastController } from '@ionic/angular';
+import { Firestore, collection, collectionData, setDoc, doc, deleteDoc, updateDoc } from '@angular/fire/firestore';
+import { AlertController, ToastController, LoadingController } from '@ionic/angular';
+import { initializeApp, deleteApp } from 'firebase/app';
+import { environment } from '../../../../environments/environment';
+import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 
 @Component({
   selector: 'app-staff',
@@ -10,31 +13,34 @@ import { AlertController, ToastController } from '@ionic/angular';
 })
 export class StaffPage implements OnInit {
   staffList: any[] = [];
+  roles: any = [];
 
   constructor(
     private firestore: Firestore,
-    private alertCtrl: AlertController,
+    private loadingCtrl: LoadingController,
     private toastCtrl: ToastController
   ) { }
 
   ngOnInit() {
-    const staffRef = collection(this.firestore, 'staff');
+    const staffRef = collection(this.firestore, 'users');
     collectionData(staffRef, { idField: 'id' }).subscribe(res => {
       this.staffList = res;
     });
+
+    const rolesRef = collection(this.firestore, 'roles');
+    this.roles = collectionData(rolesRef, { idField: 'id' });
   }
 
   getRoleColor(role: string) {
-    switch (role?.toLowerCase()) {
-      case 'admin': return 'danger';
-      case 'waiter': return 'success';
-      case 'chef': return 'warning';
-      default: return 'medium';
-    }
+    const r = role?.toLowerCase();
+    if (r === 'admin') return 'danger';
+    if (r === 'waiter' || r === 'captain') return 'success';
+    if (r === 'chef') return 'warning';
+    return 'tertiary';
   }
 
   async deleteStaff(id: string) {
-    const docRef = doc(this.firestore, `staff/${id}`);
+    const docRef = doc(this.firestore, `users/${id}`);
     await deleteDoc(docRef);
   }
 
@@ -46,14 +52,15 @@ export class StaffPage implements OnInit {
   isModalOpen = false;
   editingMember: any = null;
   staffForm = {
-    name: '',
+    fullname: '',
+    username: '',
     email: '',
     role: 'Waiter'
   };
 
   openAddStaff() {
     this.editingMember = null;
-    this.staffForm = { name: '', email: '', role: 'Waiter' };
+    this.staffForm = { fullname: '', username: '', email: '', role: 'Waiter' };
     this.isModalOpen = true;
   }
 
@@ -67,25 +74,62 @@ export class StaffPage implements OnInit {
     this.isModalOpen = false;
   }
 
+
   async saveStaff() {
-    if (!this.staffForm.name || !this.staffForm.email) {
-      this.showToast('Name and Email are required', 'warning');
+    const loading = await this.loadingCtrl.create({ message: 'Creating Staff...' });
+    await loading.present();
+    if (!this.staffForm.fullname || !this.staffForm.username || !this.staffForm.email || !this.staffForm.role) {
+      this.showToast('All fields are required', 'warning');
       return;
     }
 
+    let secondaryApp;
     try {
-      if (this.editingMember) {
-        const docRef = doc(this.firestore, `staff/${this.editingMember.id}`);
-        await updateDoc(docRef, this.staffForm);
-        this.showToast('Staff updated successfully', 'success');
-      } else {
-        const colRef = collection(this.firestore, 'staff');
-        await addDoc(colRef, { ...this.staffForm, status: 'Active', createdAt: new Date() });
-        this.showToast('Staff added successfully', 'success');
-      }
+      const config = environment.firebaseConfig;
+      secondaryApp = initializeApp(config, 'Secondary');
+      const secondaryAuth = getAuth(secondaryApp);
+
+      const userCredential = await createUserWithEmailAndPassword(
+        secondaryAuth,
+        this.staffForm.email,
+        '123456' // Default password
+      );
+      const uid = userCredential.user.uid;
+
+      const userDocRef = doc(this.firestore, `users/${uid}`);
+
+      await setDoc(userDocRef, {
+        uid: uid,
+        fullname: this.staffForm.fullname,
+        email: this.staffForm.email,
+        username: this.staffForm.username,
+        role: this.staffForm.role,
+        status: 'Active',
+        createdAt: new Date()
+      });
+
+      await deleteApp(secondaryApp);
+      this.showToast('Staff added to Unified Users', 'success');
       this.isModalOpen = false;
+      await loading.dismiss();
+    } catch (error: any) {
+      await loading.dismiss();
+      if (secondaryApp) await deleteApp(secondaryApp);
+      this.showToast(error.message, 'danger');
+    }
+  }
+
+  async toggleStaffStatus(member: any) {
+    const newStatus = member.status === 'Active' ? 'Inactive' : 'Active';
+    try {
+      const docRef = doc(this.firestore, `users/${member.id}`);
+      await updateDoc(docRef, { status: newStatus });
+      this.showToast(
+        `${member.username} is now ${newStatus}`,
+        newStatus === 'Active' ? 'success' : 'warning'
+      );
     } catch (e) {
-      this.showToast('Operation failed', 'danger');
+      this.showToast('Failed to update status', 'danger');
     }
   }
 }

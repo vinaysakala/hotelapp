@@ -9,19 +9,30 @@
 
 <ion-content style="--background: #ffffff;">
   <div class="card-container">
-    <ion-card mode="ios" *ngFor="let member of staffList" class="staff-card">
+    <ion-card mode="ios" *ngFor="let member of staffList" class="staff-card"
+      [style.opacity]="member.status === 'Inactive' ? '0.6' : '1'">
       <ion-item lines="none">
         <ion-avatar slot="start" class="staff-avatar">
-          <div class="initial-circle">{{ member.name.charAt(0) }}</div>
+          <div class="initial-circle" [style.background]="member.status === 'Inactive' ? '#ccc' : ''">
+            {{ member.fullname.charAt(0) }}
+          </div>
         </ion-avatar>
 
         <ion-label>
-          <h2 class="staff-name">{{ member.name }}</h2>
+          <h2 class="staff-name">{{ member.username }}</h2>
           <p class="staff-email">{{ member.email }}</p>
           <ion-badge [color]="getRoleColor(member.role)" mode="ios">
             {{ member.role }}
           </ion-badge>
         </ion-label>
+
+        <div slot="end" style="display: flex; flex-direction: column; align-items: center; margin-right: 10px;">
+          <ion-note color="medium" style="font-size: 10px; margin-bottom: 4px;">
+            {{ member.status }}
+          </ion-note>
+          <ion-toggle [checked]="member.status === 'Active'" (ionChange)="toggleStaffStatus(member)" color="success">
+          </ion-toggle>
+        </div>
 
         <div slot="end" class="action-group">
           <ion-button fill="clear" (click)="editStaff(member)">
@@ -34,7 +45,6 @@
       </ion-item>
     </ion-card>
   </div>
-
   <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button (click)="openAddStaff()">
       <ion-icon name="person-add"></ion-icon>
@@ -56,8 +66,13 @@
     <ion-content class="ion-padding">
       <div class="form-container">
         <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+          <ion-label position="stacked">User Name</ion-label>
+          <ion-input [(ngModel)]="staffForm.username" placeholder="Enter username"></ion-input>
+        </ion-item>
+
+        <ion-item fill="outline" mode="md" class="ion-margin-bottom">
           <ion-label position="stacked">Full Name</ion-label>
-          <ion-input [(ngModel)]="staffForm.name" placeholder="Enter name"></ion-input>
+          <ion-input [(ngModel)]="staffForm.fullname" placeholder="Enter name"></ion-input>
         </ion-item>
 
         <ion-item fill="outline" mode="md" class="ion-margin-bottom">
@@ -71,19 +86,15 @@
               <ion-label>Assign Role</ion-label>
             </ion-list-header>
 
-            <ion-item lines="none" class="role-item">
-              <ion-icon name="shield-half-outline" slot="start" color="danger"></ion-icon>
-              <ion-radio value="Admin">Admin</ion-radio>
+            <ion-item lines="none" class="role-item" *ngFor="let role of roles | async">
+              <ion-icon [name]="role.roleName.toLowerCase() === 'admin' ? 'shield-half-outline' : 'person-outline'"
+                slot="start" [color]="getRoleColor(role.roleName)">
+              </ion-icon>
+              <ion-radio [value]="role.roleName">{{ role.roleName }}</ion-radio>
             </ion-item>
 
-            <ion-item lines="none" class="role-item">
-              <ion-icon name="restaurant-outline" slot="start" color="success"></ion-icon>
-              <ion-radio value="Waiter">Waiter</ion-radio>
-            </ion-item>
-
-            <ion-item lines="none" class="role-item">
-              <ion-icon name="flame-outline" slot="start" color="warning"></ion-icon>
-              <ion-radio value="Chef">Chef</ion-radio>
+            <ion-item *ngIf="roles.length === 0" lines="none">
+              <ion-note>No roles found. Please create roles first.</ion-note>
             </ion-item>
           </ion-radio-group>
         </ion-list>
